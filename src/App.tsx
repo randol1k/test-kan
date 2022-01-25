@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styles from "./App.module.scss";
+import { Routes, Route } from "react-router-dom";
+import { MAIN_SCREEN_PATH, FINAL_SCREEN_PATH } from "src/utils";
 
-function App() {
+import { MainScreen } from "src/components/Layout/MainScreen";
+
+function _App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.app}>
+      <Routes>
+        <Route path="/" element={<MainScreen />} />
+        {/* <Route path={`/${MAIN_SCREEN_PATH}`} />
+        <Route path={`/${FINAL_SCREEN_PATH}`} /> */}
+      </Routes>
     </div>
   );
 }
 
-export default App;
+export const App = _App;
