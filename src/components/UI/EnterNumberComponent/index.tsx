@@ -1,4 +1,6 @@
-import { useState } from "react";
+import styles from "./EnterNumberComponent.module.scss";
+import NumberFormat from "react-number-format";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FINAL_SCREEN_PATH,
@@ -8,53 +10,29 @@ import {
   NUMBERS_IN_BRACKETS,
   BEGIN_NUMBER_IN_BRACKETS,
   END_NUMBER_IN_BRACKETS,
+  INITIAL_FOCUSED_ELEMENT,
+  keyPressHandler,
 } from "src/utils";
 
 import { DialPad } from "src/components/UI/DialPad";
-import { RulesCheckbox } from "src/components/UI/RulesCheckbox";
-import { SubmitNumberBtn } from "src/components/UI/SubmitNumberBtn";
-import { useEffect } from "react";
 
 const _EnterNumberComponent = () => {
   const navigate = useNavigate();
   const [enteredNumber, setEnteredNumber] = useState("");
   const [agreedToRules, setAgreedToRules] = useState(false);
-  const [isNumberValid, setIsNumberValid] = useState(false);
+  // const [isNumberValid, setIsNumberValid] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [focusedElement, setFocusedElement] = useState(INITIAL_FOCUSED_ELEMENT);
 
   useEffect(() => {
-    const keyPress = (event: any) => {
-      switch (event.key) {
-        case "1":
-        case "2":
-        case "3":
-        case "4":
-        case "5":
-        case "6":
-        case "7":
-        case "8":
-        case "9":
-        case "0":
-          event.target.id = event.key;
-          break;
-        case "Backspace":
-          event.target.id = "remove";
-          break;
-        default:
-          break;
-      }
-
-      if (event.target.id === event.key || event.target.id === "remove") {
-        updateFormHandler({
-          target: { id: event.target.id, value: event.target.id },
-        });
-      }
-    };
-
-    document.addEventListener("keydown", keyPress);
+    document.addEventListener("keydown", (event) =>
+      keyPressHandler(event, updateFormHandler, setFocusedElement)
+    );
 
     return () => {
-      document.removeEventListener("keydown", keyPress);
+      document.removeEventListener("keydown", (event) =>
+        keyPressHandler(event, updateFormHandler, setFocusedElement)
+      );
     };
   }, []);
 
@@ -79,11 +57,12 @@ const _EnterNumberComponent = () => {
         });
         break;
       default:
-        if (enteredNumber.length < NUMBER_LENGTH) {
-          setEnteredNumber((prevState) => {
+        setEnteredNumber((prevState) => {
+          if (prevState.length < NUMBER_LENGTH) {
             return prevState + event.target.value;
-          });
-        }
+          }
+          return prevState;
+        });
         break;
     }
   };
@@ -97,23 +76,26 @@ const _EnterNumberComponent = () => {
   };
 
   return (
-    <div>
-      <p>
-        Number: +7{" "}
-        {enteredNumber.length <= NUMBERS_IN_BRACKETS
-          ? `(${enteredNumber})`
-          : `(${enteredNumber.slice(
-              BEGIN_NUMBER_IN_BRACKETS,
-              END_NUMBER_IN_BRACKETS
-            )}) ${enteredNumber.slice(END_NUMBER_IN_BRACKETS)}`}
+    <div className={styles.enterNumberComponent}>
+      <h3>Введите ваш номер мобильного телефона</h3>
+      <NumberFormat
+        format="+7 (###) ###-##-##"
+        mask="_"
+        value={enteredNumber}
+        allowEmptyFormatting={true}
+        className={styles.phoneParagraph}
+        readOnly
+      />
+      <p className={styles.headingParagraph}>
+        и с Вами свяжется наш менеджер для дальнейшей консультации
       </p>
       <form onSubmit={submitNumberHandler}>
-        <DialPad updateFormHandler={updateFormHandler} />
-        <RulesCheckbox
-          agreedToRules={agreedToRules}
+        <DialPad
+          setFocusedElement={setFocusedElement}
           updateFormHandler={updateFormHandler}
+          focusedElement={focusedElement}
+          isFormValid={isFormValid}
         />
-        <SubmitNumberBtn isFormValid={isFormValid} />
       </form>
     </div>
   );

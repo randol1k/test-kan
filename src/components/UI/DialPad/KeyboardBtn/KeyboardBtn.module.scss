@@ -1,0 +1,19 @@
+@use "/src/variables" as vars;
+
+.keyBtn {
+  border: 2px solid vars.$color-black;
+  font-weight: 500;
+  font-size: 1.6rem;
+
+  &:focus,
+  &:hover {
+    background-color: vars.$color-black;
+    color: vars.$color-white;
+    outline: none;
+  }
+}
+
+.extended {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}

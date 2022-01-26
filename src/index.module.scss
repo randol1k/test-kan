@@ -1,3 +1,5 @@
+@use "/src/variables" as vars;
+
 *,
 *::after,
 *::before {
@@ -12,4 +14,9 @@ html {
 
 body {
   font-size: 1.6rem;
+  margin: 0 auto;
+  height: vars.$screen-height;
+  width: vars.$screen-width;
+  overflow-x: hidden;
+  font-family: "Roboto", sans-serif;
 }

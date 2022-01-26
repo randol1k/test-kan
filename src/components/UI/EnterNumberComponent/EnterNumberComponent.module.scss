@@ -1,0 +1,36 @@
+@use "/src/variables" as vars;
+
+.enterNumberComponent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  max-width: 38rem;
+  height: 100%;
+  padding: 0 4.8rem;
+  background-color: vars.$color-cyan;
+
+  h3 {
+    font-size: 2.6rem;
+    font-weight: 400;
+  }
+
+  .phoneParagraph {
+    font-size: 3.2rem;
+    font-weight: 700;
+    background: none;
+    border: none;
+    text-align: center;
+    margin: 1.3rem 0 1.3rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .headingParagraph {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+  }
+}

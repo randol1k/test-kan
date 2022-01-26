@@ -1,17 +1,41 @@
-import { MouseEventHandler } from "react";
+import styles from "./KeyboardBtn.module.scss";
+import { MouseEventHandler, useEffect, useRef } from "react";
 
 interface AppProps {
   btnId: string;
-}
-
-interface AppProps {
+  label?: string;
   updateFormHandler: MouseEventHandler;
+  focusedElement: string;
+  extended?: boolean;
 }
 
-const _KeyboardBtn = ({ btnId, updateFormHandler }: AppProps) => {
+const _KeyboardBtn = ({
+  btnId,
+  updateFormHandler,
+  focusedElement,
+  label,
+  extended,
+}: AppProps) => {
+  const btnRef: any = useRef();
+  useEffect(() => {
+    if (btnId === focusedElement) {
+      btnRef.current.focus();
+    } else {
+      btnRef.current.blur();
+    }
+    // eslint-disable-next-line
+  }, [focusedElement]);
+
   return (
-    <button id={btnId} value={btnId} type="button" onClick={updateFormHandler}>
-      {btnId}
+    <button
+      className={`${styles.keyBtn} ${extended ? styles.extended : ""}`}
+      ref={btnRef}
+      id={btnId}
+      value={btnId}
+      type="button"
+      onClick={updateFormHandler}
+    >
+      {label ? label.toUpperCase() : btnId}
     </button>
   );
 };
